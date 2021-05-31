@@ -45,9 +45,9 @@ public class KeyEntry
 
     private String key;
 
-    private Map<String, String> localeValues = new HashMap<String, String>();
+    private Map<String, String> localeValues = new HashMap<>();
 
-    private List<String> locales = new LinkedList<String>();
+    private List<String> locales = new LinkedList<>();
 
     public KeyEntry(String key)
     {

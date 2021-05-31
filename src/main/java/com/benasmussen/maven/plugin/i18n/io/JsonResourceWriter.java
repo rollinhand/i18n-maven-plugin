@@ -76,6 +76,7 @@ public class JsonResourceWriter extends AbstractResourceWriter<LinkedHashMap<Str
     }
 
     @Override
+    @SuppressWarnings({"squid:S2093", "squid:S2095"})
     protected void after(ResourceEntry resourceEntry)
     {
         super.after(resourceEntry);

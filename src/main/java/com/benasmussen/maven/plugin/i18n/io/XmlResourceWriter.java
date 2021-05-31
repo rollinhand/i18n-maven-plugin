@@ -73,6 +73,7 @@ public class XmlResourceWriter extends AbstractResourceWriter<Properties>
     }
 
     @Override
+    @SuppressWarnings("squid:S2093")
     protected void after(ResourceEntry resourceEntry)
     {
         super.after(resourceEntry);
@@ -81,7 +82,6 @@ public class XmlResourceWriter extends AbstractResourceWriter<Properties>
         for (String locale : keySet)
         {
             String filename = getFilename(resourceEntry, locale);
-
             OutputStream os = null;
             try
             {

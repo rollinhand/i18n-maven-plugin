@@ -58,7 +58,7 @@ public class ResourceReader
 
     int stopAfterEmptyRows = 15;
 
-    LinkedList<ResourceEntry> entries = new LinkedList<ResourceEntry>();
+    LinkedList<ResourceEntry> entries = new LinkedList<>();
 
     public ResourceReader(InputStream is) throws IOException
     {
@@ -70,7 +70,7 @@ public class ResourceReader
      * 
      * @throws Exception
      */
-    public void process() throws Exception
+    public void process()
     {
         int emptyCounter = 0;
 
@@ -137,7 +137,7 @@ public class ResourceReader
     public Map<String, Integer> getLocaleDefinitions(String sheetName)
     {
         int maxCols = 300;
-        Map<String, Integer> localeDefinitions = new HashMap<String, Integer>();
+        Map<String, Integer> localeDefinitions = new HashMap<>();
 
         CellRangeAddress cellRange = CellRangeAddress.valueOf(localeCell);
 
@@ -217,7 +217,7 @@ public class ResourceReader
      */
     public List<String> getSheetNames()
     {
-        List<String> sheets = new LinkedList<String>();
+        List<String> sheets = new LinkedList<>();
 
         int sheetsCount = workbook.getNumberOfSheets();
         for (int idx = 0; idx < sheetsCount; idx++)

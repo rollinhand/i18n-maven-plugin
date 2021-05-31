@@ -75,6 +75,7 @@ public class PropertiesResourceWriter extends AbstractResourceWriter<Properties>
     }
 
     @Override
+    @SuppressWarnings({"squid:S2093", "squid:S2095"})
     protected void after(ResourceEntry resourceEntry)
     {
         super.after(resourceEntry);
@@ -83,7 +84,6 @@ public class PropertiesResourceWriter extends AbstractResourceWriter<Properties>
         for (String locale : keySet)
         {
             String filename = getFilename(resourceEntry, locale);
-
             Writer writer = null;
             try
             {
@@ -91,6 +91,7 @@ public class PropertiesResourceWriter extends AbstractResourceWriter<Properties>
                 writer = new OutputStreamWriter(new FileOutputStream(outputFile), getOutputEnconding());
 
                 Properties properties = output.get(locale);
+                System.out.println("Locale: " + locale + " - Properties: " + properties + " - Filename: " + filename);
                 properties.store(writer, "Generated file " + filename);
             }
             catch (Exception e)

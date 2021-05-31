@@ -8,21 +8,21 @@ package com.benasmussen.maven.plugin.i18n.io;
  */
 public enum OutputFormat
 {
-    properties {
+    PROPERTIES {
         @Override
         public ResourceWriter getWriter()
         {
             return new PropertiesResourceWriter();
         }
     },
-    json {
+    JSON {
         @Override
         public ResourceWriter getWriter()
         {
             return new JsonResourceWriter();
         }
     },
-    xml {
+    XML {
         @Override
         public ResourceWriter getWriter()
         {

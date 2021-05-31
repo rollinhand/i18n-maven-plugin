@@ -36,9 +36,9 @@ public class ResourceEntry
 
     String name;
 
-    LinkedList<KeyEntry> entries = new LinkedList<KeyEntry>();
+    LinkedList<KeyEntry> entries = new LinkedList<>();
 
-    private List<String> locales = new LinkedList<String>();
+    private List<String> locales = new LinkedList<>();
 
     public ResourceEntry(String name)
     {
@@ -60,7 +60,7 @@ public class ResourceEntry
         this.name = name;
     }
 
-    public LinkedList<KeyEntry> getEntries()
+    public List<KeyEntry> getEntries()
     {
         return entries;
     }
@@ -72,7 +72,7 @@ public class ResourceEntry
 
     public void setLocales(Collection<String> locales)
     {
-        this.locales = new LinkedList<String>(locales);
+        this.locales = new LinkedList<>(locales);
     }
 
 }

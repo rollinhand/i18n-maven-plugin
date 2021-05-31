@@ -20,9 +20,7 @@ package com.benasmussen.maven.plugin.i18n;
  * #L%
  */
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,9 +107,9 @@ public class InternationalizationMojo extends AbstractMojo
      * <code>XML</code><br/>
      *
      * Defaults:<br/>
-     * properties: JAVA<br/>
-     * json: NONE<br/>
-     * xml: NONE
+     * PROPERTIES: JAVA<br/>
+     * JSON: NONE<br/>
+     * XML: NONE
      *
      * For custom overrides use the <code>escapings</code> map.
      *
@@ -120,83 +118,76 @@ public class InternationalizationMojo extends AbstractMojo
     @Parameter(property = "escaping")
     private Escaping escaping;
 
-    public void execute() throws MojoExecutionException
-    {
-        String currentFile = null;
-        InputStream is = null;
-        try
+    private void createOutputDirectoryIfNotExists() {
+        if (!outputDirectory.exists())
         {
-            if (!outputDirectory.exists())
-            {
-                getLog().info("Create output directory: " + outputDirectory);
-                outputDirectory.mkdirs();
-            }
-
-            // use default file if empty
-            if (files == null || files.isEmpty())
-            {
-                files = new ArrayList<String>();
-                files.add(DEFAULT_FILE);
-            }
-
-            // loop files
-            for (String file : files)
-            {
-                currentFile = file;
-				
-				File f = new File(file);
-
-				if (f.exists()) 
-				{
-					getLog().info("Process file " + file);
-					
-					is = new FileInputStream(f);
-
-					// xls resource reader
-					ResourceReader resourceReader = new ResourceReader(is);
-					resourceReader.setKeyCell(keyCell);
-					resourceReader.setLocaleCell(localeCell);
-
-					resourceReader.process();
-
-					List<ResourceEntry> resultEntries = resourceReader.getEntries();
-
-					// process output writer
-					for (OutputFormat format : outputFormat)
-					{
-						// get writer based on specified format
-						ResourceWriter writer = format.getWriter();
-						// overwrite the default escaping
-						if (escapings.containsKey(format))
-						{
-							writer.setEscaping(escapings.get(format));
-						}
-						else if (escaping != null)
-						{
-							writer.setEscaping(escaping);
-						}
-						// set other properties
-						writer.setOutputEnconding(outputEncoding);
-						writer.setOutputFolder(outputDirectory);
-						writer.setResourceEntries(resultEntries);
-						writer.write();
-					}
-
-					IOUtils.closeQuietly(is);
-				}
-				else
-				{
-					getLog().info("Skipped, file not found: " + file);
-				}
-            }
+            getLog().info("Create output directory: " + outputDirectory);
+            outputDirectory.mkdirs();
         }
-        catch (Exception e)
+    }
+
+    private void checkDefaultFileHandling() {
+        if (files == null || files.isEmpty())
         {
-            throw new MojoExecutionException("Error processing file " + currentFile, e);
+            files = new ArrayList<>();
+            files.add(DEFAULT_FILE);
         }
-        finally
-        {
+    }
+
+    private void doProcessFile(File f) throws MojoExecutionException {
+        // xls resource reader
+        try (final InputStream is = new FileInputStream(f)) {
+            ResourceReader resourceReader = new ResourceReader(is);
+            resourceReader.setKeyCell(keyCell);
+            resourceReader.setLocaleCell(localeCell);
+            resourceReader.process();
+
+            List<ResourceEntry> resultEntries = resourceReader.getEntries();
+
+            // process output writer
+            for (OutputFormat format : outputFormat)
+            {
+                // get writer based on specified format
+                ResourceWriter writer = format.getWriter();
+                // overwrite the default escaping
+                if (escapings.containsKey(format))
+                {
+                    writer.setEscaping(escapings.get(format));
+                }
+                else if (escaping != null)
+                {
+                    writer.setEscaping(escaping);
+                }
+                // set other properties
+                writer.setOutputEnconding(outputEncoding);
+                writer.setOutputFolder(outputDirectory);
+                writer.setResourceEntries(resultEntries);
+                writer.write();
+            }
+
             IOUtils.closeQuietly(is);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error processing file " + f.getName(), e);
+        }
+    }
+
+    @SuppressWarnings("squid:S2093")
+    public void execute() throws MojoExecutionException {
+        createOutputDirectoryIfNotExists();
+
+        // use default file if empty
+        checkDefaultFileHandling();
+
+        // loop files
+        for (String file : files) {
+            File f = new File(file);
+
+            if (f.exists()) {
+                getLog().info("Process file " + file);
+                doProcessFile(f);
+            } else {
+                getLog().info("Skipped, file not found: " + file);
+            }
         }
     }
 

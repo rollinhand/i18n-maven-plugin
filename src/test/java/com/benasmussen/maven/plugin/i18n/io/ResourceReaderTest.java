@@ -75,7 +75,7 @@ public class ResourceReaderTest
         assertTrue(resourceCustomer.getLocales().contains("en"));
 
         // customer keys
-        LinkedList<KeyEntry> keyEntries = resourceCustomer.getEntries();
+        List<KeyEntry> keyEntries = resourceCustomer.getEntries();
         assertNotNull(keyEntries);
         assertEquals(4, keyEntries.size());
 

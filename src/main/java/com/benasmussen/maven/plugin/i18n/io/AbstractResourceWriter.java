@@ -20,16 +20,14 @@ package com.benasmussen.maven.plugin.i18n.io;
  * #L%
  */
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.benasmussen.maven.plugin.i18n.domain.KeyEntry;
 import com.benasmussen.maven.plugin.i18n.domain.ResourceEntry;
+import org.apache.commons.lang.StringUtils;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractResourceWriter<T> implements ResourceWriter
 {
@@ -44,9 +42,10 @@ public abstract class AbstractResourceWriter<T> implements ResourceWriter
 
     Escaping escaping;
 
+    @SuppressWarnings("squid:S1172")
     protected void before(ResourceEntry resourceEntry)
     {
-        output = new HashMap<String, T>();
+        output = new HashMap<>();
 
         // template
     }
@@ -70,8 +69,7 @@ public abstract class AbstractResourceWriter<T> implements ResourceWriter
 
     protected void doWrite(ResourceEntry resourceEntry)
     {
-        LinkedList<KeyEntry> entries = resourceEntry.getEntries();
-        for (KeyEntry keyEntry : entries)
+        for (KeyEntry keyEntry : resourceEntry.getEntries())
         {
             writeEntry(keyEntry);
         }
