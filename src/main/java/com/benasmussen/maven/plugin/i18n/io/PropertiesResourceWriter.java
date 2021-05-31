@@ -91,7 +91,6 @@ public class PropertiesResourceWriter extends AbstractResourceWriter<Properties>
                 writer = new OutputStreamWriter(new FileOutputStream(outputFile), getOutputEnconding());
 
                 Properties properties = output.get(locale);
-                System.out.println("Locale: " + locale + " - Properties: " + properties + " - Filename: " + filename);
                 properties.store(writer, "Generated file " + filename);
             }
             catch (Exception e)
