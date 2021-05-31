@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.benasmussen.maven.plugin.i18n.exception.I18NException;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -166,6 +167,8 @@ public class InternationalizationMojo extends AbstractMojo
             }
 
             IOUtils.closeQuietly(is);
+        } catch (I18NException e) {
+            getLog().error(e);
         } catch (IOException e) {
             throw new MojoExecutionException("Error processing file " + f.getName(), e);
         }

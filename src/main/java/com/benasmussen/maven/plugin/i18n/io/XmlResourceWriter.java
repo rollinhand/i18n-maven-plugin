@@ -62,10 +62,8 @@ public class XmlResourceWriter extends AbstractResourceWriter<Properties>
     public void writeEntry(KeyEntry keyEntry)
     {
         Set<String> locales = keyEntry.getLocaleValues().keySet();
-        for (String locale : locales)
-        {
+        for (String locale : locales) {
             Properties properties = output.get(locale);
-
             String value = keyEntry.getLocaleValues().get(locale);
 
             properties.put(keyEntry.getKey(), escaping.apply(value));

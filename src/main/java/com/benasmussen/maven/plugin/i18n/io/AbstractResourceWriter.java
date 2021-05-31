@@ -22,6 +22,7 @@ package com.benasmussen.maven.plugin.i18n.io;
 
 import com.benasmussen.maven.plugin.i18n.domain.KeyEntry;
 import com.benasmussen.maven.plugin.i18n.domain.ResourceEntry;
+import com.benasmussen.maven.plugin.i18n.exception.I18NException;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
@@ -67,10 +68,9 @@ public abstract class AbstractResourceWriter<T> implements ResourceWriter
         // template
     }
 
-    protected void doWrite(ResourceEntry resourceEntry)
-    {
-        for (KeyEntry keyEntry : resourceEntry.getEntries())
-        {
+    protected void doWrite(ResourceEntry resourceEntry) {
+        for (KeyEntry keyEntry : resourceEntry.getEntries()) {
+            assertKeyEntry(keyEntry);
             writeEntry(keyEntry);
         }
     }
@@ -78,6 +78,13 @@ public abstract class AbstractResourceWriter<T> implements ResourceWriter
     protected abstract void writeEntry(KeyEntry keyEntry);
 
     protected abstract String getFilenameSuffix();
+
+    protected void assertKeyEntry(KeyEntry keyEntry) {
+        if (keyEntry.getKey() == null || keyEntry.getKey().isEmpty()) {
+            // do not move on if key is empty
+            throw new I18NException("Key is missing in XLS file");
+        }
+    }
 
     public String getFilename(ResourceEntry resourceEntry, String locale)
     {
